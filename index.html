@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>给阿嬷的情书 ✉️ 520专属</title>
+    <title>江海有岸 团圆可盼 ✉️</title>
     <style>
+        /* 导入古风楷体字体 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&display=swap');
+
         body {
             margin: 0;
             padding: 0;
@@ -12,77 +15,115 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(to bottom, #fff5f5, #ffe4e1);
-            font-family: 'Georgia', 'FandolSong', 'Microsoft YaHei', sans-serif;
+            background: #ede3cb; /* 温暖的老纸浆背景色 */
+            font-family: 'Noto Serif SC', 'Kaiti', 'STKaiti', serif;
             overflow: hidden;
             user-select: none;
         }
 
+        /* 侨批信笺主体 */
         .card {
             width: 85%;
             max-width: 400px;
-            background: rgba(255, 255, 255, 0.96);
-            padding: 30px 20px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(233, 150, 150, 0.15);
+            background-color: #faf6eb; /* 宣纸白 */
+            padding: 35px 25px;
+            border-radius: 4px; /* 传统信笺不使用大圆角 */
+            border: 2px solid #8a1f1f; /* 复古红边框 */
+            box-shadow: 0 10px 30px rgba(94, 69, 44, 0.2);
             text-align: center;
+            position: relative;
             transition: all 0.5s ease;
         }
 
-        /* 第一幕：多页情书样式 */
+        /* 传统信笺的红框装饰 */
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 8px; left: 8px; right: 8px; bottom: 8px;
+            border: 1px solid #8a1f1f;
+            pointer-events: none;
+        }
+
+        /* 复古红色邮戳印章 */
+        .stamp {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            border: 2px solid #8a1f1f;
+            color: #8a1f1f;
+            font-size: 0.8rem;
+            padding: 5px;
+            border-radius: 50%;
+            transform: rotate(-15deg);
+            font-weight: bold;
+            letter-spacing: 2px;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.85;
+            box-shadow: inset 0 0 4px rgba(138, 31, 31, 0.2);
+        }
+
+        /* 信件内容区 */
         .letter-content {
             text-align: left;
-            line-height: 1.8;
-            color: #444;
+            line-height: 1.9;
+            color: #2b2b2b;
             font-size: 0.95rem;
             margin: 20px 0;
-            min-height: 240px;
+            min-height: 250px;
             animation: fadeIn 0.5s ease;
         }
 
+        /* 电影台词红线框 */
         .movie-quote {
-            border-left: 3px solid #db7093;
+            border-left: 3px solid #8a1f1f;
             padding-left: 12px;
-            font-style: italic;
-            color: #666;
-            margin-bottom: 15px;
+            color: #555;
+            margin-bottom: 20px;
             font-size: 0.88rem;
             line-height: 1.6;
-            background: #fff9fa;
-            padding-top: 5px;
-            padding-bottom: 5px;
+            background: #fdfaf2;
+            padding-top: 8px;
+            padding-bottom: 8px;
         }
 
         .page-num {
-            font-size: 0.8rem;
-            color: #aaa;
+            font-size: 0.75rem;
+            color: #888;
             margin-bottom: 15px;
+            letter-spacing: 2px;
         }
 
-        /* 第二幕：福利抽奖（默认隐藏） */
+        /* 第二幕：特权汇款单（默认隐藏） */
         #prize-scene {
             display: none;
         }
 
+        /* 汇款凭证框 */
         .voucher-card {
-            border: 2px dashed #ffb6c1;
+            border: 1px dashed #8a1f1f;
             padding: 20px;
-            border-radius: 10px;
-            background-color: #fff9fa;
+            background-color: #fdfaf2;
             margin: 20px 0;
             min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.1rem;
-            color: #c71585;
+            color: #8a1f1f;
             font-weight: bold;
+            box-shadow: inset 0 0 10px rgba(138,31,31,0.05);
         }
 
         h1 {
-            color: #db7093;
-            font-size: 1.4rem;
+            color: #8a1f1f;
+            font-size: 1.35rem;
             margin: 0;
+            letter-spacing: 3px;
+            font-weight: 700;
         }
 
         .buttons {
@@ -92,28 +133,31 @@
             margin-top: 20px;
             position: relative;
             height: 45px;
+            z-index: 20;
         }
 
         button {
             padding: 10px 20px;
             font-size: 0.9rem;
             border: none;
-            border-radius: 25px;
+            border-radius: 2px; /* 传统直角风格 */
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: inherit;
         }
 
         .btn-primary {
-            background-color: #db7093;
-            color: white;
-            box-shadow: 0 5px 15px rgba(219, 112, 147, 0.3);
+            background-color: #8a1f1f;
+            color: #faf6eb;
+            box-shadow: 0 4px 10px rgba(138, 31, 31, 0.3);
             width: 100%;
         }
 
         #no-btn {
-            background-color: #eee;
-            color: #666;
+            background-color: #e0d9c5;
+            color: #555;
             position: absolute;
+            border: 1px solid #c4ba9e;
         }
 
         @keyframes fadeIn {
@@ -124,30 +168,32 @@
 </head>
 <body>
 
-    <!-- 第一幕：多页情书场景 -->
+    <!-- 第一幕：多页侨批家书 -->
     <div class="card" id="letter-scene">
-        <h1 id="letter-title">给妻家书 ✉️</h1>
-        <div class="page-num" id="page-indicator">（第一页 / 共三页）</div>
+        <div class="stamp">平安</div>
+        <h1 id="letter-title">吾爱 寄家书 ✉️</h1>
+        <div class="page-num" id="page-indicator">（第一联 / 共三联）</div>
         
         <div class="letter-content" id="letter-text">
             <!-- 动态载入情书内容 -->
         </div>
         
-        <button class="btn-primary" id="next-btn" onclick="nextPage()">读下一封 ✉️</button>
+        <button class="btn-primary" id="next-btn" onclick="nextPage()">阅下一联 ✉️</button>
     </div>
 
-    <!-- 第二幕：福利抽奖场景 -->
+    <!-- 第二幕：特权汇单 -->
     <div class="card" id="prize-scene">
-        <h1>520 领导专属福利社 👑</h1>
-        <div style="color: #888; font-size: 0.85rem; margin-top: 5px;">温馨提示：抽中的福利不许耍赖，截图有效</div>
+        <div class="stamp" style="top: 15px; right: 15px;">批银</div>
+        <h1>五二零 · 专属汇兑单</h1>
+        <div style="color: #666; font-size: 0.8rem; margin-top: 5px; letter-spacing: 1px;">凭此单向家属支取520特权，凭截图兑现</div>
         
         <div class="voucher-card" id="display-area">
-            🎁 专属福利等待抽取中
+            ✉️ 批银汇兑，点击下方支取
         </div>
         
         <div class="buttons">
-            <button class="btn-primary" id="draw-btn" onclick="drawPrize()" style="width: auto;">抽取福利</button>
-            <button id="no-btn" onmouseover="moveNoButton()" onclick="moveNoButton()">不需要福利</button>
+            <button class="btn-primary" id="draw-btn" onclick="drawPrize()" style="width: auto;">支取特权</button>
+            <button id="no-btn" onmouseover="moveNoButton()" onclick="moveNoButton()">罢收此单</button>
         </div>
     </div>
 
@@ -166,49 +212,47 @@
         noBtn.style.left = '65%';
         noBtn.style.top = '0';
 
-        // 三页情书的数据集
+        // 侨批风三页情书内容
         const letterPages = [
             {
                 title: "吾爱 展信安 ✉️",
-                indicator: "（第一页 / 共三页）",
+                indicator: "（第一联 / 共三联）",
                 content: `
                     <div class="movie-quote">
                         “行船入夜，恰江上升明月，似与你并肩共赏。江海万里，心中念你，便不觉遥远。” ——《给阿嬷的情书》
                     </div>
-                    <p>见字如晤。平日里朝夕相伴，有些滚烫的念想，反而被藏进了柴米油盐的琐碎里，鲜少对你提及。</p>
-                    <p>电影里，那些跨越山海的信，写满了克制与思念。而在我们的日子里，虽然没有漂洋过海的距离，但只要想到每一个推开门回家的夜里都有你在，心中便觉江海有岸，落脚有家。</p>
+                    <p>见字如面。平日里朝夕相对，那些温热的话语反而被藏进了琐碎的生计中，鲜少对你提及。</p>
+                    <p>电影里，那些跨越山海的批信，写满了克制与思念。虽然我们不曾分离于江海两端，但只要想到每一个晚归的夜里有你守望，心中便觉江海有岸，落脚有家。</p>
                 `
             },
             {
                 title: "纸短情长 ✉️",
-                indicator: "（第二页 / 共三页）",
+                indicator: "（第二联 / 共三联）",
                 content: `
                     <div class="movie-quote">
                         “我心只有一个，一心不能二用，今生可与你结伴，我已万分满足，有你牵挂，何言孤苦。” ——《给阿嬷的情书》
                     </div>
-                    <p>电影里，阿嬷淑柔在信中细细碎碎地写着“番薯肥美，孩子们半夜偷啃嬉闹”的寻常风景，远方的阿公看信便如临其境。</p>
-                    <p>我也时常想起我们的一餐一饭，那些抢被子的深夜、为吃什么争执的傍晚。这些“浅话”，在年岁里流淌成最深的意长。能执子之手，在这个不大不小的世界里同行，已是极大的知足。</p>
+                    <p>阿嬷在信中琐碎念叨着“番薯肥美，孩子们半夜嬉闹”的寻常生活，每一个字，都是对远方良人的牵挂。</p>
+                    <p>我也时常想起我们的一餐一饭、深夜抢被子的嬉闹。能执手同行在这个不大不小的世界里，于柴米油盐中相守，我亦万分满足。</p>
                 `
             },
             {
                 title: "执手白头 ✉️",
-                indicator: "（第三页 / 共三页）",
+                indicator: "（第三联 / 共三联）",
                 content: `
                     <div class="movie-quote">
-                        “暹罗虽远，心有所寄，身若比邻，切要平安，即为团圆。” ——《给阿嬷的情书》
+                        “心有所寄，身若比邻，切要平安，即为团圆。” ——《给阿嬷的情书》
                     </div>
-                    <p>只要有你在，每一个寻常的温热日子，都是团圆。谢谢你陪伴我走过风雨同舟的春秋。余生漫漫，我们还要一起看更多风景。</p>
-                    <p>今日520，这封手书是我最真挚的表白。不过，除了纸短情长，生活总需要有些实在的欢喜。为了犒劳我最亲爱的“领导”，我特地在后页备了一份专属福利，请查收……</p>
+                    <p>只要有你在，每一个寻常的温热日子，都是团圆。谢谢你陪伴我走过风雨同舟的春秋。余生漫漫，我们还要一起走过更多四季。</p>
+                    <p>古时侨批，既有书信，亦附汇银。今日五二零，这封手书是我最真挚的表白。另外，我还随信附上了一张“专属特权汇兑单”，请吾爱查收……</p>
                 `
             }
         ];
 
         let currentPage = 0;
 
-        // 加载第一页
         function loadPage(pageIndex) {
             letterText.style.animation = 'none';
-            // 触发重绘以重新运行动画
             void letterText.offsetWidth; 
             letterText.innerHTML = letterPages[pageIndex].content;
             letterTitle.innerText = letterPages[pageIndex].title;
@@ -216,16 +260,14 @@
             letterText.style.animation = 'fadeIn 0.5s ease';
 
             if (pageIndex === letterPages.length - 1) {
-                nextBtn.innerText = "进入 520 福利社 🎁";
+                nextBtn.innerText = "开启 520 汇兑单 🎁";
             } else {
-                nextBtn.innerText = "读下一封 ✉️";
+                nextBtn.innerText = "阅下一联 ✉️";
             }
         }
 
-        // 初始化第一页
         loadPage(0);
 
-        // 翻页逻辑
         function nextPage() {
             if (currentPage < letterPages.length - 1) {
                 currentPage++;
@@ -235,7 +277,6 @@
             }
         }
 
-        // 切换到抽奖场景
         function enterPrizeScene() {
             letterScene.style.opacity = '0';
             setTimeout(() => {
@@ -245,14 +286,14 @@
             }, 500);
         }
 
-        // 趣味福利池
+        // 侨批风格特权池
         const prizes = [
-            "🧹 获得【家务全包免单券】1张（今天我全包）",
-            "💆‍♂️ 获得【私人专属捶背按摩 30 分钟】",
-            "🛒 获得【购物车宝贝代付代清空】",
-            "🍲 获得【今晚餐厅外卖决定权】",
-            "☕ 获得【早起咖啡/热茶端到床头服务】",
-            "🤫 获得【无条件停止唠叨、免责卡一次】"
+            "🧹 凭此单兑换：【家务全包免单券】1张（今日内有效）",
+            "💆‍♂️ 凭此单兑换：【私人专属捶背按摩 30 分钟】",
+            "🛒 凭此单兑换：【购物车宝贝代付代清空】",
+            "🍲 凭此单兑换：【今晚餐厅外卖决定权】",
+            "☕ 凭此单兑换：【早起茶水端到床头服务】",
+            "🤫 凭此单兑换：【无条件停止唠叨、免责卡一次】"
         ];
 
         let clickCount = 0;
@@ -269,20 +310,20 @@
                 clearInterval(timer);
                 
                 if (clickCount === 1) {
-                    displayArea.innerHTML = "🎁 恭喜获得：<br>【家务全包免单券】 1 张！";
-                    drawBtn.innerText = "再抽一次";
+                    displayArea.innerHTML = "🎁 兑得契据：<br>【家务全包免单券】 1 张！";
+                    drawBtn.innerText = "再行支取";
                 } else if (clickCount === 2) {
-                    displayArea.innerHTML = "🎁 恭喜再次获得：<br>【私人专属按摩 30 分钟】！";
-                    drawBtn.innerText = "最后一次机会";
+                    displayArea.innerHTML = "🎁 兑得契据：<br>【私人专属按摩 30 分钟】！";
+                    drawBtn.innerText = "最后一试";
                 } else {
-                    displayArea.innerHTML = "✨ 今日福利已领满 ✨<br>快截图发给我，今晚开始逐一兑现！";
+                    displayArea.innerHTML = "✨ 银票额度已满 ✨<br>请截图保存，今晚向我如实兑现！";
                     drawBtn.style.display = 'none';
                     noBtn.style.display = 'none';
                 }
             }, 1000);
         }
 
-        // “不需要福利”按钮躲避逻辑
+        // 躲避按钮
         function moveNoButton() {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 20);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 20);
