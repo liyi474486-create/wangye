@@ -13,7 +13,7 @@
             align-items: center;
             justify-content: center;
             background: linear-gradient(to bottom, #fff5f5, #ffe4e1);
-            font-family: 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+            font-family: 'Georgia', 'FandolSong', 'Microsoft YaHei', sans-serif;
             overflow: hidden;
             user-select: none;
         }
@@ -29,14 +29,15 @@
             transition: all 0.5s ease;
         }
 
-        /* 第一幕：情书样式 */
+        /* 第一幕：多页情书样式 */
         .letter-content {
             text-align: left;
             line-height: 1.8;
             color: #444;
             font-size: 0.95rem;
             margin: 20px 0;
-            min-height: 180px;
+            min-height: 240px;
+            animation: fadeIn 0.5s ease;
         }
 
         .movie-quote {
@@ -45,11 +46,17 @@
             font-style: italic;
             color: #666;
             margin-bottom: 15px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             line-height: 1.6;
             background: #fff9fa;
             padding-top: 5px;
             padding-bottom: 5px;
+        }
+
+        .page-num {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-bottom: 15px;
         }
 
         /* 第二幕：福利抽奖（默认隐藏） */
@@ -74,8 +81,8 @@
 
         h1 {
             color: #db7093;
-            font-size: 1.5rem;
-            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            margin: 0;
         }
 
         .buttons {
@@ -108,33 +115,31 @@
             color: #666;
             position: absolute;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 第一幕：浪漫情书 -->
+    <!-- 第一幕：多页情书场景 -->
     <div class="card" id="letter-scene">
-        <h1>《给阿嬷的情书》✉️</h1>
-        <div class="letter-content">
-            <div class="movie-quote">
-                “行船入夜，恰江上升明月，似与你并肩共赏。江海万里，心中念你，便不觉遥远。”
-                <br>
-                <span style="font-size: 0.8rem; color: #999; display: block; text-align: right; margin-top: 5px;">—— 电影《给阿嬷的情书》</span>
-            </div>
-            <p>
-                电影里说：“江海有岸，团圆可盼。” 以前听这些话总觉得遥远，但在和你在一个屋檐下、过着柴米油盐平凡日子的这些年里，我才渐渐读懂了“相守”的重量。
-            </p>
-            <p>
-                谢谢你包容我、体贴我，在每一个普通的日常里给我最温暖的依靠。在这个 520，我想把这封“情书”送给你，也顺便带了一些只属于你的小惊喜……
-            </p>
+        <h1 id="letter-title">给妻家书 ✉️</h1>
+        <div class="page-num" id="page-indicator">（第一页 / 共三页）</div>
+        
+        <div class="letter-content" id="letter-text">
+            <!-- 动态载入情书内容 -->
         </div>
-        <button class="btn-primary" onclick="enterPrizeScene()">拆开 520 福利 🎁</button>
+        
+        <button class="btn-primary" id="next-btn" onclick="nextPage()">读下一封 ✉️</button>
     </div>
 
-    <!-- 第二幕：福利抽奖 -->
+    <!-- 第二幕：福利抽奖场景 -->
     <div class="card" id="prize-scene">
         <h1>520 领导专属福利社 👑</h1>
-        <div style="color: #888; font-size: 0.85rem;">温馨提示：抽中的福利不许耍赖，截图有效</div>
+        <div style="color: #888; font-size: 0.85rem; margin-top: 5px;">温馨提示：抽中的福利不许耍赖，截图有效</div>
         
         <div class="voucher-card" id="display-area">
             🎁 专属福利等待抽取中
@@ -149,6 +154,10 @@
     <script>
         const letterScene = document.getElementById('letter-scene');
         const prizeScene = document.getElementById('prize-scene');
+        const letterText = document.getElementById('letter-text');
+        const letterTitle = document.getElementById('letter-title');
+        const pageIndicator = document.getElementById('page-indicator');
+        const nextBtn = document.getElementById('next-btn');
         const noBtn = document.getElementById('no-btn');
         const displayArea = document.getElementById('display-area');
         const drawBtn = document.getElementById('draw-btn');
@@ -156,6 +165,75 @@
         // 初始化“不需要”按钮位置
         noBtn.style.left = '65%';
         noBtn.style.top = '0';
+
+        // 三页情书的数据集
+        const letterPages = [
+            {
+                title: "吾爱 展信安 ✉️",
+                indicator: "（第一页 / 共三页）",
+                content: `
+                    <div class="movie-quote">
+                        “行船入夜，恰江上升明月，似与你并肩共赏。江海万里，心中念你，便不觉遥远。” ——《给阿嬷的情书》
+                    </div>
+                    <p>见字如晤。平日里朝夕相伴，有些滚烫的念想，反而被藏进了柴米油盐的琐碎里，鲜少对你提及。</p>
+                    <p>电影里，那些跨越山海的信，写满了克制与思念。而在我们的日子里，虽然没有漂洋过海的距离，但只要想到每一个推开门回家的夜里都有你在，心中便觉江海有岸，落脚有家。</p>
+                `
+            },
+            {
+                title: "纸短情长 ✉️",
+                indicator: "（第二页 / 共三页）",
+                content: `
+                    <div class="movie-quote">
+                        “我心只有一个，一心不能二用，今生可与你结伴，我已万分满足，有你牵挂，何言孤苦。” ——《给阿嬷的情书》
+                    </div>
+                    <p>电影里，阿嬷淑柔在信中细细碎碎地写着“番薯肥美，孩子们半夜偷啃嬉闹”的寻常风景，远方的阿公看信便如临其境。</p>
+                    <p>我也时常想起我们的一餐一饭，那些抢被子的深夜、为吃什么争执的傍晚。这些“浅话”，在年岁里流淌成最深的意长。能执子之手，在这个不大不小的世界里同行，已是极大的知足。</p>
+                `
+            },
+            {
+                title: "执手白头 ✉️",
+                indicator: "（第三页 / 共三页）",
+                content: `
+                    <div class="movie-quote">
+                        “暹罗虽远，心有所寄，身若比邻，切要平安，即为团圆。” ——《给阿嬷的情书》
+                    </div>
+                    <p>只要有你在，每一个寻常的温热日子，都是团圆。谢谢你陪伴我走过风雨同舟的春秋。余生漫漫，我们还要一起看更多风景。</p>
+                    <p>今日520，这封手书是我最真挚的表白。不过，除了纸短情长，生活总需要有些实在的欢喜。为了犒劳我最亲爱的“领导”，我特地在后页备了一份专属福利，请查收……</p>
+                `
+            }
+        ];
+
+        let currentPage = 0;
+
+        // 加载第一页
+        function loadPage(pageIndex) {
+            letterText.style.animation = 'none';
+            // 触发重绘以重新运行动画
+            void letterText.offsetWidth; 
+            letterText.innerHTML = letterPages[pageIndex].content;
+            letterTitle.innerText = letterPages[pageIndex].title;
+            pageIndicator.innerText = letterPages[pageIndex].indicator;
+            letterText.style.animation = 'fadeIn 0.5s ease';
+
+            if (pageIndex === letterPages.length - 1) {
+                nextBtn.innerText = "进入 520 福利社 🎁";
+            } else {
+                nextBtn.innerText = "读下一封 ✉️";
+            }
+        }
+
+        // 初始化第一页
+        loadPage(0);
+
+        // 翻页逻辑
+        function nextPage() {
+            if (currentPage < letterPages.length - 1) {
+                currentPage++;
+                loadPage(currentPage);
+            } else {
+                enterPrizeScene();
+            }
+        }
 
         // 切换到抽奖场景
         function enterPrizeScene() {
@@ -167,7 +245,7 @@
             }, 500);
         }
 
-        // 夫妻趣味福利池
+        // 趣味福利池
         const prizes = [
             "🧹 获得【家务全包免单券】1张（今天我全包）",
             "💆‍♂️ 获得【私人专属捶背按摩 30 分钟】",
