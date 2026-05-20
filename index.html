@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>江海有岸 团圆可盼 ✉️</title>
     <style>
-        /* 导入古风楷体字体 */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&display=swap');
 
         body {
@@ -15,27 +14,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #ede3cb; /* 温暖的老纸浆背景色 */
+            background: #ede3cb; 
             font-family: 'Noto Serif SC', 'Kaiti', 'STKaiti', serif;
             overflow: hidden;
             user-select: none;
         }
 
-        /* 侨批信笺主体 */
         .card {
             width: 85%;
             max-width: 400px;
-            background-color: #faf6eb; /* 宣纸白 */
+            background-color: #faf6eb; 
             padding: 35px 25px;
-            border-radius: 4px; /* 传统信笺不使用大圆角 */
-            border: 2px solid #8a1f1f; /* 复古红边框 */
+            border-radius: 4px; 
+            border: 2px solid #8a1f1f; 
             box-shadow: 0 10px 30px rgba(94, 69, 44, 0.2);
             text-align: center;
             position: relative;
             transition: all 0.5s ease;
         }
 
-        /* 传统信笺的红框装饰 */
         .card::before {
             content: "";
             position: absolute;
@@ -44,7 +41,6 @@
             pointer-events: none;
         }
 
-        /* 复古红色邮戳印章 */
         .stamp {
             position: absolute;
             top: 25px;
@@ -66,7 +62,6 @@
             box-shadow: inset 0 0 4px rgba(138, 31, 31, 0.2);
         }
 
-        /* 信件内容区 */
         .letter-content {
             text-align: left;
             line-height: 1.9;
@@ -77,7 +72,6 @@
             animation: fadeIn 0.5s ease;
         }
 
-        /* 电影台词红线框 */
         .movie-quote {
             border-left: 3px solid #8a1f1f;
             padding-left: 12px;
@@ -97,12 +91,10 @@
             letter-spacing: 2px;
         }
 
-        /* 第二幕：特权汇款单（默认隐藏） */
         #prize-scene {
             display: none;
         }
 
-        /* 汇款凭证框 */
         .voucher-card {
             border: 1px dashed #8a1f1f;
             padding: 20px;
@@ -140,10 +132,17 @@
             padding: 10px 20px;
             font-size: 0.9rem;
             border: none;
-            border-radius: 2px; /* 传统直角风格 */
+            border-radius: 2px; 
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: inherit;
+        }
+
+        button:disabled {
+            background-color: #ccc !important;
+            color: #888 !important;
+            cursor: not-allowed;
+            box-shadow: none !important;
         }
 
         .btn-primary {
@@ -175,7 +174,7 @@
         <div class="page-num" id="page-indicator">（第一联 / 共三联）</div>
         
         <div class="letter-content" id="letter-text">
-            <!-- 动态载入情书内容 -->
+            <!-- 动态载入 -->
         </div>
         
         <button class="btn-primary" id="next-btn" onclick="nextPage()">阅下一联 ✉️</button>
@@ -193,7 +192,7 @@
         
         <div class="buttons">
             <button class="btn-primary" id="draw-btn" onclick="drawPrize()" style="width: auto;">支取特权</button>
-            <button id="no-btn" onmouseover="moveNoButton()" onclick="moveNoButton()">罢收此单</button>
+            <button id="no-btn" onmouseover="handleHover()" onclick="handleClick()">罢收此单</button>
         </div>
     </div>
 
@@ -208,11 +207,9 @@
         const displayArea = document.getElementById('display-area');
         const drawBtn = document.getElementById('draw-btn');
 
-        // 初始化“不需要”按钮位置
         noBtn.style.left = '65%';
         noBtn.style.top = '0';
 
-        // 侨批风三页情书内容
         const letterPages = [
             {
                 title: "吾爱 展信安 ✉️",
@@ -286,21 +283,52 @@
             }, 500);
         }
 
-        // 侨批风格特权池
+        // 福利池
         const prizes = [
-            "🧹 凭此单兑换：【家务全包免单券】1张（今日内有效）",
-            "💆‍♂️ 凭此单兑换：【私人专属捶背按摩 30 分钟】",
-            "🛒 凭此单兑换：【超级奖金1888】",
-            "🍲 凭此单兑换：【无敌奖金2888】",
-            "☕ 凭此单兑换：【早起茶水端到床头服务】",
-            "🤫 凭此单兑换：【终极大奖3888】"
+            "🧹 扫洒庭除：【家务全包免单券】1张",
+            "💆‍♂️ 活血化瘀：【私人专属捶背按摩 30分钟】",
+            "🛒 钱粮全免：【超级大奖1888】",
+            "🍲 膳食钦点：【无敌大奖2888】",
+            "☕ 晨起问安：【早起茶水/咖啡端到床头】",
+            "🤫 息事宁人：【终极大奖3888】"
         ];
 
-        let clickCount = 0;
+        let isRunaway = true; // 是否处于逃跑状态
+        let firstPrize = "";
+        let finalPrize = "";
+        let drawCount = 0;
+
+        // 处理鼠标移入事件
+        function handleHover() {
+            if (isRunaway) {
+                evade();
+            }
+        }
+
+        // 处理点击事件
+        function handleClick() {
+            if (isRunaway) {
+                evade();
+            } else {
+                drawPrize(); // 只有在非避让状态下，真实点击才触发重新抽奖
+            }
+        }
+
+        // 按钮避让定位
+        function evade() {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 20);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 20);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
 
         function drawPrize() {
-            clickCount++;
+            drawBtn.disabled = true;
+            noBtn.disabled = true;
             
+            // 滚屏动画
             let timer = setInterval(() => {
                 const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
                 displayArea.innerHTML = randomPrize;
@@ -308,29 +336,45 @@
 
             setTimeout(() => {
                 clearInterval(timer);
-                
-                if (clickCount === 1) {
-                    displayArea.innerHTML = "🎁 兑得契据：<br>【家务全包免单券】 1 张！";
-                    drawBtn.innerText = "再行支取";
-                } else if (clickCount === 2) {
-                    displayArea.innerHTML = "🎁 兑得契据：<br>【私人专属按摩 30 分钟】！";
-                    drawBtn.innerText = "最后一试";
-                } else {
-                    displayArea.innerHTML = "✨ 银票额度已满 ✨<br>请截图保存，今晚向我如实兑现！";
-                    drawBtn.style.display = 'none';
+                drawBtn.disabled = false;
+                noBtn.disabled = false;
+
+                if (drawCount === 0) {
+                    // 第一轮定格
+                    drawCount = 1;
+                    firstPrize = prizes[Math.floor(Math.random() * prizes.length)];
+                    displayArea.innerHTML = `🎁 首次兑得：<br>${firstPrize}`;
+                    
+                    // 改变主按钮
+                    drawBtn.innerText = "确定收下";
+                    drawBtn.setAttribute("onclick", "confirmPrize()");
+                    
+                    // 改变辅按钮状态：关闭避让，重置样式，更名
+                    isRunaway = false;
+                    noBtn.style.position = 'static';
+                    noBtn.style.left = 'auto';
+                    noBtn.style.top = 'auto';
+                    noBtn.innerText = "不满意更换";
+
+                } else if (drawCount === 1) {
+                    // 第二轮定格（更换）
+                    drawCount = 2;
+                    const remainingPrizes = prizes.filter(p => p !== firstPrize);
+                    finalPrize = remainingPrizes[Math.floor(Math.random() * remainingPrizes.length)];
+                    displayArea.innerHTML = `🎁 终极兑得：<br>${finalPrize}`;
+                    
+                    // 机会用尽，隐藏更换按钮
                     noBtn.style.display = 'none';
                 }
-            }, 1000);
+            }, 1000); 
         }
 
-        // 躲避按钮
-        function moveNoButton() {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 20);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 20);
-            
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
+        // 确定收下福利
+        function confirmPrize() {
+            const chosen = (drawCount === 2) ? finalPrize : firstPrize;
+            displayArea.innerHTML = `🎉 终成契据！恭喜获得：<br>${chosen}<br><br>✨ 银票已盖印 ✨<br>快截图保存，向我兑现契据！`;
+            drawBtn.style.display = 'none';
+            noBtn.style.display = 'none';
         }
     </script>
 </body>
